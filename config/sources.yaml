@@ -1,0 +1,95 @@
+# ─────────────────────────────────────────────────────────
+# Tender Sources Configuration
+# Add new portals here — no code changes required.
+# Each source needs: name, scraper_class, base_url, enabled flag,
+# and optional search_keywords / extra settings.
+# ─────────────────────────────────────────────────────────
+
+sources:
+  # Central Public Procurement Portal
+  - name: "CPPP"
+    scraper_class: "scraper.cppp_scraper.CPPPScraper"
+    base_url: "https://eprocure.gov.in/cppp/latestactivetendersnew/cpppdata"
+    enabled: true
+    max_pages: 10
+    extra: {}
+
+  # Government e-Marketplace
+  - name: "GeM"
+    scraper_class: "scraper.gem_scraper.GeMScraper"
+    base_url: "https://bidplus.gem.gov.in/all-bids"
+    enabled: false
+    search_keywords:
+      - "PLC SCADA"
+      - "electrical panel"
+      - "automation system"
+      - "instrumentation"
+      - "control panel"
+    max_pages: 5
+    extra: {}
+
+  # NTPC eProcurement
+  - name: "NTPC"
+    scraper_class: "scraper.psu_scraper.PSUScraper"
+    base_url: "https://eprocure.gov.in/cppp/latestactivetendersnew/cpppdata"
+    enabled: false
+    search_keywords:
+      - "NTPC electrical"
+      - "NTPC automation"
+      - "NTPC instrumentation"
+    max_pages: 3
+    extra:
+      organization_filter: "NTPC"
+
+  # BHEL eProcurement
+  - name: "BHEL"
+    scraper_class: "scraper.psu_scraper.PSUScraper"
+    base_url: "https://eprocure.gov.in/cppp/latestactivetendersnew/cpppdata"
+    enabled: false
+    search_keywords:
+      - "BHEL electrical"
+      - "BHEL panel"
+      - "BHEL automation"
+    max_pages: 3
+    extra:
+      organization_filter: "BHEL"
+
+  # BEL - Bharat Electronics Limited
+  - name: "BEL"
+    scraper_class: "scraper.psu_scraper.PSUScraper"
+    base_url: "https://eprocure.gov.in/cppp/latestactivetendersnew/cpppdata"
+    enabled: false
+    search_keywords:
+      - "BEL electrical"
+      - "BEL automation"
+      - "BEL control system"
+    max_pages: 3
+    extra:
+      organization_filter: "Bharat Electronics"
+
+  # ONGC - Oil and Natural Gas Corporation
+  - name: "ONGC"
+    scraper_class: "scraper.psu_scraper.PSUScraper"
+    base_url: "https://eprocure.gov.in/cppp/latestactivetendersnew/cpppdata"
+    enabled: false
+    search_keywords:
+      - "ONGC instrumentation"
+      - "ONGC automation"
+      - "ONGC SCADA"
+      - "ONGC electrical"
+    max_pages: 3
+    extra:
+      organization_filter: "ONGC"
+
+  # BidAssist (third-party aggregator)
+  - name: "BidAssist"
+    scraper_class: "scraper.bidassist_scraper.BidAssistScraper"
+    base_url: "https://www.bidassist.com/tenders/india"
+    enabled: true
+    search_keywords:
+      - "PLC SCADA automation"
+      - "electrical panel manufacturing"
+      - "instrumentation control"
+    max_pages: 3
+    extra:
+      category: "Electrical"

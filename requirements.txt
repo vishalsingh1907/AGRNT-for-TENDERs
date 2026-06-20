@@ -1,0 +1,48 @@
+# Core Async Framework
+fastapi==0.115.12
+uvicorn[standard]==0.34.2
+jinja2==3.1.6
+python-multipart==0.0.20
+
+# Browser Automation
+playwright==1.52.0
+
+# Database (Async)
+sqlalchemy[asyncio]==2.0.41
+aiosqlite==0.20.0
+alembic==1.15.2
+
+# AI Providers
+google-genai==1.14.0
+openai==1.82.0
+
+# Scheduling
+apscheduler==3.11.0
+
+# HTTP Client (Async)
+httpx==0.28.1
+
+# Retry & Resilience
+tenacity==9.1.2
+
+# Configuration
+pydantic-settings==2.9.1
+pydantic==2.11.3
+pyyaml==6.0.2
+
+# PDF Processing
+PyPDF2==3.0.1
+
+# HTML Parsing
+beautifulsoup4==4.13.4
+lxml==5.4.0
+
+# Date Parsing
+python-dateutil==2.9.0.post0
+
+# Logging
+structlog==25.4.0
+
+# Utilities
+python-dotenv==1.1.0
+aiofiles==24.1.0
