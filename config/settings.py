@@ -1,101 +1,34 @@
 """
-Application settings loaded from environment variables.
-All secrets and configuration are managed here.
+Minimal settings — loads credentials from .env file.
 """
-
-from __future__ import annotations
 
 import os
-from pathlib import Path
-from typing import List
+from dotenv import load_dotenv
 
-from pydantic import Field
-from pydantic_settings import BaseSettings, SettingsConfigDict
+load_dotenv()
 
+# ── Telegram ──────────────────────────────────────────────
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
+TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
 
-class Settings(BaseSettings):
-    """Application configuration from environment variables."""
+# ── AI (OpenRouter — optional, for future use) ───────────
+AI_API_KEY = os.getenv("API_KEY_OF_MODEL", "") or os.getenv("OPENAI_API_KEY", "")
+AI_MODEL = os.getenv("AI_MODEL", "meta-llama/llama-3.3-70b-instruct:free")
 
-    model_config = SettingsConfigDict(
-        env_file=".env",
-        env_file_encoding="utf-8",
-        case_sensitive=False,
-        extra="ignore",
-    )
+# ── Scraping ──────────────────────────────────────────────
+SCRAPE_TIMEOUT = int(os.getenv("SCRAPE_TIMEOUT_MS", "60000")) // 1000  # seconds
+REQUEST_TIMEOUT = 30  # seconds for httpx requests
+USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+    "AppleWebKit/537.36 (KHTML, like Gecko) "
+    "Chrome/131.0.0.0 Safari/537.36"
+)
 
-    # ── Database ───────────────────────────────────────────────
-    DATABASE_URL: str = Field(
-        default="sqlite+aiosqlite:///tender_agent.db",
-        description="Async SQLite connection string",
-    )
-    DATABASE_URL_SYNC: str = Field(
-        default="sqlite:///tender_agent.db",
-        description="Sync SQLite URL for APScheduler job store",
-    )
+# ── Tender Freshness ─────────────────────────────────────
+# Only show tenders closing within this many days from now
+CLOSING_WITHIN_DAYS = 30
+# Only show tenders published within this many days
+PUBLISHED_WITHIN_DAYS = 7
 
-    # ── AI Provider ────────────────────────────────────────────
-    AI_PROVIDER: str = Field(default="gemini", description="gemini or openai")
-    GEMINI_API_KEY: str = Field(default="", description="Google Gemini API key")
-    OPENAI_API_KEY: str = Field(default="", description="OpenAI API key (fallback)")
-    AI_MODEL: str = Field(default="gemini-2.5-flash", description="Model name")
-    AI_MAX_RPM: int = Field(default=10, description="Max AI requests per minute")
-
-    # ── Telegram ───────────────────────────────────────────────
-    TELEGRAM_BOT_TOKEN: str = Field(default="", description="Telegram Bot API token")
-    TELEGRAM_CHAT_ID: str = Field(default="", description="Telegram chat/group ID")
-
-    # ── Scraping ───────────────────────────────────────────────
-    SCRAPE_INTERVAL_HOURS: int = Field(default=6, description="Scrape interval in hours")
-    SCRAPE_TIMEOUT_MS: int = Field(default=60000, description="Page load timeout in ms")
-    SCRAPE_DELAY_MIN: float = Field(default=2.0, description="Min delay between pages (sec)")
-    SCRAPE_DELAY_MAX: float = Field(default=5.0, description="Max delay between pages (sec)")
-    MAX_PAGES_PER_SOURCE: int = Field(default=10, description="Max pages to scrape per source")
-    MAX_PAGES_CPPP: int = Field(default=3, description="Max pages to scrape from CPPP specifically")
-
-    # ── Relevance ──────────────────────────────────────────────
-    RELEVANCE_THRESHOLD: int = Field(default=30, description="Min score for notification")
-
-    # ── Paths ──────────────────────────────────────────────────
-    PDF_DOWNLOAD_DIR: str = Field(default="./downloads", description="PDF download directory")
-    SOURCES_CONFIG_PATH: str = Field(default="./config/sources.yaml", description="Tender sources YAML")
-    LOG_LEVEL: str = Field(default="INFO", description="Logging level")
-
-    # ── Dashboard ──────────────────────────────────────────────
-    DASHBOARD_HOST: str = Field(default="0.0.0.0", description="Dashboard bind host")
-    DASHBOARD_PORT: int = Field(default=8000, description="Dashboard port")
-
-    @property
-    def pdf_dir(self) -> Path:
-        path = Path(self.PDF_DOWNLOAD_DIR)
-        path.mkdir(parents=True, exist_ok=True)
-        return path
-
-
-# ── Business Profile (used for AI relevance scoring) ────────────
-
-COMPANY_PROFILE = """
-Kapoor Engineers Pvt. Ltd.
-
-Domains:
-- PLC Systems
-- SCADA Systems
-- Industrial Automation
-- Electrical Panels
-- Instrumentation
-- Control Systems
-- Switchgear
-- Substations
-- Industrial Electronics
-- Electrical Engineering Projects
-"""
-
-RELEVANT_KEYWORDS: List[str] = [
-    "PLC", "SCADA", "Automation", "Electrical Panel",
-    "Instrumentation", "Control System", "Switchgear",
-    "Substation", "Industrial Electronics", "Electrical Engineering",
-    "MCC", "PCC", "VFD", "Relay Panel", "Control Panel", "APFC"
-]
-
-
-# Singleton instance
-settings = Settings()
+# ── Logging ───────────────────────────────────────────────
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")

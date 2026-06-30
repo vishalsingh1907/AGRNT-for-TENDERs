@@ -1,37 +1,33 @@
-# ignore env files
-.env
-!.env.example
-
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
 *.egg-info/
 dist/
 build/
 *.egg
 
-# Virtual env
+# Virtual environment
 venv/
 .venv/
-env/
+
+# Environment
+.env
 
 # IDE
 .vscode/
 .idea/
 *.swp
-*.swo
+
+# OS
+Thumbs.db
+.DS_Store
 
 # Downloads
 downloads/
 
-# OS
-.DS_Store
-Thumbs.db
-
-# Docker
-*.log
-
-# Database
+# Database (not used but just in case)
 *.db
 *.sqlite3
+
+# Local State
+seen_tenders.json
